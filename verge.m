@@ -5,8 +5,8 @@ function res = verge(verArray, verComp)
     % or equal to a reference version.
     %
     % DISTRIBUTION:
-    %   GitHub: https://github.com/guzman-raphael/verge
-    %   FileExchange: xxxx
+    %  GitHub:       https://github.com/guzman-raphael/verge
+    %  FileExchange: https://www.mathworks.com/matlabcentral/fileexchange/71849-verge
     %
     % res = verge(verArray, verComp)
     % INPUT:
@@ -35,67 +35,66 @@ function res = verge(verArray, verComp)
     % Tested: Matlab 9.5.0.944444 (R2018b) Linux
     % Author: Raphael Guzman, DataJoint
     %
-    % $JRev: R-H V:033 Sum:R+m7rAPNLvlw Date:18-Jun-2016 14:33:17 $
-    % $License: BSD (use/copy/change/redistribute on own risk, mention the author) $
-    % $File: Tools\GLFile\verge.m $
+    % $License: MIT (use/copy/change/redistribute on own risk) $
+    % $File: verge.m $
     % History:
     % 001: 2019-06-12 11:00, First version.
     %
     % OPEN BUGS:
     %  - None 
-       res_n = length(verArray);
-       if ~res_n || max(cellfun(@(c) ~ischar(c) && ~isstring(c),verArray)) > 0 || min(cellfun('length',verArray)) == 0
-           msg = {
-               'Verge:Error:CellArray'
-               'Cell array to verify must:'
-               '- be of length >= 1,'
-               '- contain only string elements, and'
-               '- each element must be of length >= 1.'
-           };
-           error('Verge:Error:CellArray', sprintf('%s\n',msg{:}));
-       end
-       if ~ischar(verComp) && ~isstring(verComp) || length(verComp) == 0
-           msg = {
-               'Verge:Error:VersionRef'
-               'Version reference must:'
-               '- be of length >= 1, and'
-               '- a string.'
-           };
-           error('Verge:Error:VersionRef', sprintf('%s\n',msg{:}));
-       end
-       res = false(1, res_n);
-       for i = 1:res_n
-           shortVer = strsplit(verArray{i}, '.');
-           shortVer = cellfun(@(x) str2double(regexp(x,'\d*','Match')), shortVer(1,:));
-           longVer = strsplit(verComp, '.');
-           longVer = cellfun(@(x) str2double(regexp(x,'\d*','Match')), longVer(1,:)); 
-           shortVer_p = true;
-           longVer_p = false;
-           shortVer_s = length(shortVer);
-           longVer_s = length(longVer);
-    
-           if shortVer_s > longVer_s
-               [longVer shortVer] = deal(shortVer,longVer);
-               [longVer_s shortVer_s] = deal(shortVer_s,longVer_s);
-               [longVer_p shortVer_p] = deal(shortVer_p,longVer_p);
-           end
-    
-           shortVer = [shortVer zeros(1,longVer_s - shortVer_s)];
-           diff = shortVer - longVer;
-           match = diff ~= 0;
-           
-           if ~match
-               res(i) = true;
-           else
-               pos = 1:longVer_s;
-               pos = pos(match);
-               val = diff(pos(1));
-               if val > 0
-                   res(i) = shortVer_p;
-               elseif val < 0
-                   res(i) = longVer_p;
-               end
-           end
-       end
+    res_n = length(verArray);
+    if ~res_n || max(cellfun(@(c) ~ischar(c) && ...
+            ~isstring(c),verArray)) > 0 || min(cellfun('length',verArray)) == 0
+        msg = {
+            'Verge:Error:CellArray'
+            'Cell array to verify must:'
+            '- be of length >= 1,'
+            '- contain only string elements, and'
+            '- each element must be of length >= 1.'
+        };
+        error('Verge:Error:CellArray', sprintf('%s\n',msg{:}));
     end
-    
+    if ~ischar(verComp) && ~isstring(verComp) || length(verComp) == 0
+        msg = {
+            'Verge:Error:VersionRef'
+            'Version reference must:'
+            '- be of length >= 1, and'
+            '- a string.'
+        };
+        error('Verge:Error:VersionRef', sprintf('%s\n',msg{:}));
+    end
+    res = false(1, res_n);
+    for i = 1:res_n
+        shortVer = strsplit(verArray{i}, '.');
+        shortVer = cellfun(@(x) str2double(regexp(x,'\d*','Match')), shortVer(1,:));
+        longVer = strsplit(verComp, '.');
+        longVer = cellfun(@(x) str2double(regexp(x,'\d*','Match')), longVer(1,:)); 
+        shortVer_p = true;
+        longVer_p = false;
+        shortVer_s = length(shortVer);
+        longVer_s = length(longVer);
+
+        if shortVer_s > longVer_s
+            [longVer shortVer] = deal(shortVer,longVer);
+            [longVer_s shortVer_s] = deal(shortVer_s,longVer_s);
+            [longVer_p shortVer_p] = deal(shortVer_p,longVer_p);
+        end
+
+        shortVer = [shortVer zeros(1,longVer_s - shortVer_s)];
+        diff = shortVer - longVer;
+        match = diff ~= 0;
+       
+        if ~match
+            res(i) = true;
+        else
+            pos = 1:longVer_s;
+            pos = pos(match);
+            val = diff(pos(1));
+            if val > 0
+                res(i) = shortVer_p;
+            elseif val < 0
+                res(i) = longVer_p;
+            end
+        end
+    end
+end
