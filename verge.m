@@ -5,7 +5,7 @@ function res = verge(verArray, verComp)
     % or equal to a reference version.
     %
     % DISTRIBUTION:
-    %   GitHub: xxxx
+    %   GitHub: https://github.com/guzman-raphael/verge
     %   FileExchange: xxxx
     %
     % res = verge(verArray, verComp)
