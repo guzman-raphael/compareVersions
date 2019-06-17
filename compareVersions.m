@@ -6,7 +6,7 @@ function res = compareVersions(verArray, verComp)
     %
     % DISTRIBUTION:
     %  GitHub:       https://github.com/guzman-raphael/compareVersions
-    %  FileExchange: https://www.mathworks.com/matlabcentral/fileexchange/?????
+    %  FileExchange: https://www.mathworks.com/matlabcentral/fileexchange/71849-compareversions
     %
     % res = compareVersions(verArray, verComp)
     % INPUT:
