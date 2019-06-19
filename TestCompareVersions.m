@@ -1,5 +1,5 @@
-classdef TestVerge < matlab.unittest.TestCase
-    % TestVerge performs unit tests for compareVersions use.
+classdef TestCompareVersions < matlab.unittest.TestCase
+    % TestCompareVersions performs unit tests for compareVersions use.
     methods (Test)
         function testSimple(testCase)
             st = dbstack;

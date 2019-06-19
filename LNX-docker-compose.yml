@@ -1,0 +1,24 @@
+# docker-compose -f LNX-docker-compose.yml --env-file LNX.env up --build --exit-code-from matlab
+version: '2.2'
+services:
+  matlab:
+    environment:
+    - DISPLAY
+    - MATLAB_LICENSE
+    - MATLAB_USER
+    image: raphaelguzman/matlab:${MATLAB_VERSION}-MIN
+    user: ${MATLAB_UID}:${MATLAB_GID}
+    working_dir: /src
+    mac_address: $MATLAB_HOSTID
+    volumes:
+      - .:/src
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    command: > 
+      /bin/bash -c "
+        matlab -nodisplay -r \"\
+            res=runtests;\
+            disp(res);\
+            if all([res.Passed])  exit, else exit(1), end;\
+          \";
+      "
+      
