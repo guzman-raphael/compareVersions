@@ -14,3 +14,44 @@ Returns a logical array (C) with elements set to logical 1 (true) where A is gre
 ## Tests
 
 To run, use the command `runtests`.
+
+## Dev Notes
+
+### Package
+
+generate a .prj for the first time...
+
+copyfile('/src/compareVersions_template.prj','/src/compareVersions.prj');
+cd /src;
+version = compareVersions('version');
+cd /tmp;
+fid  = fopen('/src/compareVersions.prj','r');
+f=fread(fid,'*char')';
+fclose(fid);
+f = regexprep(f,'{{VERSION}}',version);
+fid  = fopen('/src/compareVersions.prj','w');
+fprintf(fid,'%s',f);
+fclose(fid);
+matlab.addons.toolbox.packageToolbox('/src/compareVersions.prj','/src/compareVersions');
+
+### install test (need to force previous uninstall or will install side/side)
+
+addons = matlab.addons.installedAddons;
+arrayfun(@(x) matlab.addons.uninstall(x),addons.Identifier(addons.Name == "compareVersions"), 'UniformOutput', false)
+matlab.addons.install('/src/compareVersions.mltbx')
+
+### get version of toolbox
+
+addons.Version(addons.Name == "compareVersions")
+
+
+### upload toolbox
+
+% download
+curl 'https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submissions/71849/versions/1.0.1/download/mltbx/compareVersions.mltbx' -o 'compareVersions.mltbx'
+
+
+### break github connection
+
+### download toolbox
+
