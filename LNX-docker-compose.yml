@@ -1,4 +1,4 @@
-# docker-compose -f LNX-docker-compose.yml --env-file LNX.env up --build --exit-code-from matlab
+# docker-compose -f LNX-docker-compose.yml --env-file .env up --build --exit-code-from matlab
 version: '2.2'
 services:
   matlab:

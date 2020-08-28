@@ -1,4 +1,4 @@
-function res = compareVersions(verArray, verComp)
+function res = compareVersions(varargin)
     % compareVersions - Semantic version comparison (greater than or equal)
     %
     % This function evaluates if an array of semantic versions is greater than 
@@ -42,6 +42,13 @@ function res = compareVersions(verArray, verComp)
     %
     % OPEN BUGS:
     %  - None 
+    if nargin == 1 && strcmpi(varargin{1}, 'version')
+        res = '1.0.3';
+        return;
+    else
+        verArray = varargin{1};
+        verComp = varargin{2};
+    end
     res_n = length(verArray);
     if ~res_n || max(cellfun(@(c) ~ischar(c) && ...
             ~isstring(c), verArray)) > 0 || min(cellfun(@length, verArray)) == 0
