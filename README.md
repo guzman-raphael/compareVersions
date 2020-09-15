@@ -1,3 +1,5 @@
+[![View compareVersions on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/71849-compareversions)
+
 # CompareVersions
 
 Version "Greater Than or Equal To" m-function.
@@ -55,3 +57,9 @@ curl 'https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submission
 
 ### download toolbox
 
+(put a link to github source in summary or description)
+
+guzman-raphael/compareVersions
+
+
+datajoint/datajoint-matlab
