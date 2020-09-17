@@ -23,9 +23,10 @@ services:
           docs = help('compareVersions');\
           path(oldpath);\
           package('compareVersions', 'Raphael Guzman', 'raphael.h.guzman@gmail.com',\
-                  ['''ghtb'' provides a simple way to manage addon installation of ' \
-                   'open-source MATLAB Community Toolboxes linked to GitHub (via Releases). ' \
-                   'https://www.github.com/guzman-raphael/GHToolbox.git'],\
+                  ['Semantic version \"Greater Than or Equal To\" m-function. Matlab ' \
+                   'function that will determine if a cell array of values is greater than ' \
+                   'or equal to a reference version. ' \
+                   'https://github.com/guzman-raphael/compareVersions'],\
                   docs,\
                   strjoin({'.vscode', '.git', '.env', '.gitignore', '.travis.yml',\
                            'tests', '*docker-compose.yml', 'LICENSE',\

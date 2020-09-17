@@ -41,7 +41,7 @@ function res = compareVersions(varargin)
     % OPEN BUGS:
     %  - None 
     if nargin == 1 && strcmpi(varargin{1}, 'version')
-        res = '1.0.7';
+        res = '1.0.8';
         return;
     else
         verArray = varargin{1};
