@@ -23,14 +23,12 @@ function res = compareVersions(varargin)
     %             is greater than or equal to verComp.
     % TESTS:
     %   Tests included for reference. From root package directory,
-    %   use command: runtests
+    %   use commands:
+    %       suite = TestSuite.fromFolder(pwd, 'IncludingSubfolders', true);
+    %       run(suite)
     %
     % EXAMPLES:
     %   output = compareVersions({'3.2.4beta','9.5.2.1','8.0'}, '8.0.0'); %logical([0 1 1]) 
-    %
-    % NOTES:
-    %   Tests included for reference. From root package directory,
-    %   use command: runtests
     %
     % Tested: Matlab 9.5.0.944444 (R2018b) Linux
     % Author: Raphael Guzman, DataJoint
@@ -43,7 +41,7 @@ function res = compareVersions(varargin)
     % OPEN BUGS:
     %  - None 
     if nargin == 1 && strcmpi(varargin{1}, 'version')
-        res = '1.0.6';
+        res = '1.0.7';
         return;
     else
         verArray = varargin{1};
