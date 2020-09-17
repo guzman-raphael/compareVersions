@@ -73,19 +73,21 @@ classdef TestCompareVersions < matlab.unittest.TestCase
             testCase.verifyEqual(...
                 compareVersions(v_cell, v), logical([0 1 0 1 1 1]));
         end
-        function testDoubleQuote(testCase)
-            st = dbstack;
-            disp(['---------------' st(1).name '---------------']);
-            v_cell = {"3.2.4","9.2.1","5.42.12.3","12.dev4","10","8.0.tmp0.0.0"};
-            v = '8.0.0';
-
-            testCase.verifyEqual(...
-                compareVersions(v_cell, v), logical([0 1 0 1 1 1]));
-        end
+        % function testDoubleQuote(testCase)
+        %     st = dbstack;
+        %     disp(['---------------' st(1).name '---------------']);
+        %     if ~verLessThan('matlab', '9.2')
+        %         v_cell = {"3.2.4","9.2.1","5.42.12.3","12.dev4","10","8.0.tmp0.0.0"};
+        %         v = '8.0.0';
+    
+        %         testCase.verifyEqual(...
+        %             compareVersions(v_cell, v), logical([0 1 0 1 1 1]));
+        %     end
+        % end
         function testVerNoPeriod(testCase)
             st = dbstack;
             disp(['---------------' st(1).name '---------------']);
-            v_cell = {"3.2.4","9.2.1","5.42.12.3","12.dev4","10","8.0.tmp0.0.0"};
+            v_cell = {'3.2.4','9.2.1','5.42.12.3','12.dev4','10','8.0.tmp0.0.0'};
             v = '8';
 
             testCase.verifyEqual(...
@@ -94,7 +96,7 @@ classdef TestCompareVersions < matlab.unittest.TestCase
         function testVerString(testCase)
             st = dbstack;
             disp(['---------------' st(1).name '---------------']);
-            v_cell = {"3.2.4","9.2.1","5.42.12.3","12.dev4","10","8.0.tmp0.0.0"};
+            v_cell = {'3.2.4','9.2.1','5.42.12.3','12.dev4','10','8.0.tmp0.0.0'};
             v = '8beta';
 
             testCase.verifyEqual(...
@@ -103,26 +105,28 @@ classdef TestCompareVersions < matlab.unittest.TestCase
         function testVerLong(testCase)
             st = dbstack;
             disp(['---------------' st(1).name '---------------']);
-            v_cell = {"3.2.4","9.2.1","5.42.12.3","12.dev4","10","8.0.tmp0.0.0"};
+            v_cell = {'3.2.4','9.2.1','5.42.12.3','12.dev4','10','8.0.tmp0.0.0'};
             v = '8beta.1.2.3.4.5.6';
 
             testCase.verifyEqual(...
                 compareVersions(v_cell, v), logical([0 1 0 1 1 0]));
         end
-        function testVerDoubleQuote(testCase)
-            st = dbstack;
-            disp(['---------------' st(1).name '---------------']);
-            v_cell = {"3.2.4","9.2.1","5.42.12.3","12.dev4","10","8.0.tmp0.0.0"};
-            v = "8beta.1.2.3.4.5.6";
+        % function testVerDoubleQuote(testCase)
+        %     st = dbstack;
+        %     disp(['---------------' st(1).name '---------------']);
+        %     if ~verLessThan('matlab', '9.2')
+        %         v_cell = {'3.2.4','9.2.1','5.42.12.3','12.dev4','10','8.0.tmp0.0.0'};
+        %         v = "8beta.1.2.3.4.5.6";
 
-            testCase.verifyEqual(...
-                compareVersions(v_cell, v), logical([0 1 0 1 1 0]));
-        end
+        %         testCase.verifyEqual(...
+        %             compareVersions(v_cell, v), logical([0 1 0 1 1 0]));
+        %     end
+        % end
         function testCellEmpty(testCase)
             st = dbstack;
             disp(['---------------' st(1).name '---------------']);
             v_cell = {};
-            v = "8beta.1.2.3.4.5.6";
+            v = '8beta.1.2.3.4.5.6';
 
             testCase.verifyError(@() compareVersions(v_cell, v), ...
                 'compareVersions:Error:CellArray');
@@ -166,7 +170,7 @@ classdef TestCompareVersions < matlab.unittest.TestCase
         function testDoublePeriod(testCase)
             st = dbstack;
             disp(['---------------' st(1).name '---------------']);
-            v_cell = {"9.2..4"};
+            v_cell = {'9.2..4'};
             v = '8beta.1.2.3.4.5.6';
 
             testCase.verifyEqual(...
