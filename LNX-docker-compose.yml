@@ -1,24 +1,39 @@
-# docker-compose -f LNX-docker-compose.yml --env-file .env up --build --exit-code-from matlab
-version: '2.2'
+# docker-compose -f LNX-docker-compose.yml up --build --exit-code-from app
+version: '2.4'
 services:
-  matlab:
+  app:
     environment:
-    - DISPLAY
     - MATLAB_LICENSE
     - MATLAB_USER
     image: raphaelguzman/matlab:${MATLAB_VERSION}-MIN
     user: ${MATLAB_UID}:${MATLAB_GID}
-    working_dir: /src
+    working_dir: /main
     mac_address: $MATLAB_HOSTID
     volumes:
       - .:/src
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    command: > 
-      /bin/bash -c "
-        matlab -nodisplay -r \"\
-            res=runtests;\
-            disp(res);\
-            if all([res.Passed])  exit, else exit(1), end;\
-          \";
-      "
-      
+      - ./tests:/main/tests
+      - ./package.m:/main/package.m
+    command:
+      - /bin/bash
+      - -c
+      - |
+        matlab -nodisplay -r "
+          import matlab.unittest.TestSuite;\
+          oldpath = addpath('/src');\
+          docs = help('compareVersions');\
+          path(oldpath);\
+          package('compareVersions', 'Raphael Guzman', 'raphael.h.guzman@gmail.com',\
+                  ['''ghtb'' provides a simple way to manage addon installation of ' \
+                   'open-source MATLAB Community Toolboxes linked to GitHub (via Releases). ' \
+                   'https://www.github.com/guzman-raphael/GHToolbox.git'],\
+                  docs,\
+                  strjoin({'.vscode', '.git', '.env', '.gitignore', '.travis.yml',\
+                           'tests', '*docker-compose.yml', 'LICENSE',\
+                           'matlab.prf', 'package.m', 'README.md'}, '\n'),\
+                  @() compareVersions('version'), 'workingDir', '/src');\
+          matlab.addons.toolbox.installToolbox('/src/compareVersions.mltbx');\
+          suite = TestSuite.fromFolder(pwd, 'IncludingSubfolders', true);\
+          res = run(suite);\
+          disp(res);\
+          if all([res.Passed])  exit, else exit(1), end;\
+        "      

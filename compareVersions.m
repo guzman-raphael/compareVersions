@@ -8,7 +8,7 @@ function res = compareVersions(varargin)
     %  GitHub:       https://github.com/guzman-raphael/compareVersions
     %  FileExchange: https://www.mathworks.com/matlabcentral/fileexchange/71849-compareversions
     %
-    % res = compareVersions(verArray, verComp)
+    % res = COMPAREVERSIONS(verArray, verComp)
     % INPUT:
     %   verArray: Cell array with the following conditions:
     %              - be of length >= 1,
@@ -43,7 +43,7 @@ function res = compareVersions(varargin)
     % OPEN BUGS:
     %  - None 
     if nargin == 1 && strcmpi(varargin{1}, 'version')
-        res = '1.0.5';
+        res = '1.0.6';
         return;
     else
         verArray = varargin{1};
