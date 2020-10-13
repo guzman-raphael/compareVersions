@@ -2,15 +2,13 @@
 
 # CompareVersions
 
-Semantic version "Greater Than or Equal To" m-function.
-Matlab function that will determine if a cell array of values is greater than or equal to a reference version.
+Semantic version comparison m-function. Matlab function that will compare a cell array of values to a reference version (default: greater than or equal to).
 
 
 ## Description
 
 C = compareVersions(A,B). 
-Determine if a cell array of versions (A) is greater than or equal to a reference version (B). 
-Returns a logical array (C) with elements set to logical 1 (true) where A is greater than or equal to B; otherwise, the element is logical 0 (false). The test compares only the numeric part of each cell element delimited by period(.) i.e. semantic versioning.
+Compare a cell array of versions (A) against a reference version (B). Default behavior is a greater than or equal to operation. Returns a logical array (C) with elements set to logical 1 (true) where A,B satisfy the operator `verCheck`; otherwise, the element is logical 0 (false). The test compares only the numeric part of each cell element delimited by period(.) i.e. semantic versioning.
 
 
 ## Tests
