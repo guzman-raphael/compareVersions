@@ -4,6 +4,7 @@ classdef TestCompareVersions < matlab.unittest.TestCase
         function testSimple(testCase)
             st = dbstack;
             disp(['---------------' st(1).name '---------------']);
+            disp(compareVersions('version'));
             v_cell = {'3.2.4'};
             v = '8.0.0';
 
@@ -175,6 +176,33 @@ classdef TestCompareVersions < matlab.unittest.TestCase
 
             testCase.verifyEqual(...
                 compareVersions(v_cell, v), logical([1]));
+        end
+        function testRefLong(testCase)
+            st = dbstack;
+            disp(['---------------' st(1).name '---------------']);
+            v_cell = {'8'};
+            v = '8.1';
+
+            testCase.verifyEqual(...
+                compareVersions(v_cell, v), logical(0));
+        end
+        function testExactMatch(testCase)
+            st = dbstack;
+            disp(['---------------' st(1).name '---------------']);
+            v_cell = {'3.2.4','9.2.1','5.42.12.3','12.dev4','10','8.0test.0.1'};
+            v = '8.0.0';
+
+            testCase.verifyEqual(...
+                compareVersions(v_cell, v, @(x,y) x==y), logical([0 0 0 0 0 1]));
+        end
+        function testLessThanEqualTo(testCase)
+            st = dbstack;
+            disp(['---------------' st(1).name '---------------']);
+            v_cell = {'3.2.4','9.2.1','5.42.12.3','12.dev4','10','8.0test.0.1'};
+            v = '8.0.0';
+
+            testCase.verifyEqual(...
+                compareVersions(v_cell, v, @(x,y) x<=y), logical([1 0 1 0 0 1]));
         end
     end
 end

@@ -1,0 +1,62 @@
+# docker-compose -f local-docker-compose.yml up --build
+version: '2.4'
+services:
+  app:
+    environment:
+    - MATLAB_USER
+    - MATLAB_LICENSE
+    - JUPYTER_PASSWORD=datajoint
+    - DISPLAY
+    image: raphaelguzman/matlab:${MATLAB_VERSION}-GUI
+    ports:
+      - "8888:8888"
+    user: ${MATLAB_UID}:${MATLAB_GID}
+    working_dir: /home/muser/notebooks
+    command:
+      - /bin/bash
+      - -c
+      - |
+        ORIG_DIR=$$(pwd)
+        mkdir ~/Documents
+        cd /src
+        # package into toolbox, and install
+        matlab -nodisplay -r "
+          websave([tempdir 'GHToolbox.mltbx'],\
+                  ['https://github.com/datajoint/GHToolbox' \
+                   '/releases/download/' subsref(webread(['https://api.github.com/repos' \
+                                                          '/datajoint/GHToolbox' \
+                                                          '/releases/latest']),\
+                                                 substruct('.', 'tag_name')) \
+                   '/GHToolbox.mltbx']);\
+          matlab.addons.toolbox.installToolbox([tempdir 'GHToolbox.mltbx']);\
+          docs = help('compareVersions');\
+          ghtb.package('compareVersions',\
+                       'Raphael Guzman',\
+                       'raphael.h.guzman@gmail.com',\
+                       ['Semantic version comparison m-function. Matlab function that will ' \
+                        'compare a cell array of values to a reference version (default: ' \
+                        'greater than or equal).'],\
+                       docs,\
+                       {'.vscode', '.git', '*.env', '.gitignore', '.travis.yml', 'tests',\
+                        '*docker-compose.yml', 'LICENSE', 'matlab.prf', 'README.md'},\
+                       @() compareVersions('version'), \
+                       {'compareVersions.m'});\
+          matlab.addons.toolbox.installToolbox('compareVersions.mltbx');\
+          cd(tempdir);\
+          disp(compareVersions('version'));\
+        "
+        cd "$${ORIG_DIR}"
+        # Copy preferences
+        cp /tmp/matlab.prf /home/muser/.matlab/${MATLAB_VERSION}/matlab.prf
+        # Interactive Jupyter Notebook environment
+        jupyter notebook
+    mac_address: $MATLAB_HOSTID
+    volumes:
+      ## Dev mounts
+      - .:/src
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      ## Additional mounts may go here
+      # - ./notebook:/home/muser/notebooks
+      - ./matlab.prf:/tmp/matlab.prf
+networks:
+  main:
