@@ -92,14 +92,14 @@ function res = compareVersions(varargin)
         };
         error('compareVersions:Error:VersionCheck', sprintf('%s\n',msg{:}));
     end
+    refVer = strsplit(verComp, '.');
+    refVer = cellfun(@(x) str2double(regexp(x,'\d*','Match')), refVer(1,:));
+    refVer_s = length(refVer);
     res = false(1, res_n);
     for i = 1:res_n
         targetVer = strsplit(verArray{i}, '.');
         targetVer = cellfun(@(x) str2double(regexp(x,'\d*','Match')), targetVer(1,:));
-        refVer = strsplit(verComp, '.');
-        refVer = cellfun(@(x) str2double(regexp(x,'\d*','Match')), refVer(1,:));
         targetVer_s = length(targetVer);
-        refVer_s = length(refVer);
 
         if refVer_s > targetVer_s
             targetVer = [targetVer zeros(1,refVer_s - targetVer_s)];

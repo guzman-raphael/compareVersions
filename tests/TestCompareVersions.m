@@ -177,6 +177,15 @@ classdef TestCompareVersions < matlab.unittest.TestCase
             testCase.verifyEqual(...
                 compareVersions(v_cell, v), logical([1]));
         end
+        function testRefLong(testCase)
+            st = dbstack;
+            disp(['---------------' st(1).name '---------------']);
+            v_cell = {'8'};
+            v = '8.1';
+
+            testCase.verifyEqual(...
+                compareVersions(v_cell, v), logical(0));
+        end
         function testExactMatch(testCase)
             st = dbstack;
             disp(['---------------' st(1).name '---------------']);
