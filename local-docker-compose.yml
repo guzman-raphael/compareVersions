@@ -37,8 +37,8 @@ services:
                         'compare a cell array of values to a reference version (default: ' \
                         'greater than or equal).'],\
                        docs,\
-                       {'.vscode', '.git', '*.env', '.gitignore', '.travis.yml', 'tests',\
-                        '*docker-compose.yml', 'LICENSE', 'matlab.prf', 'README.md'},\
+                       {'.vscode', '.git', '*.env', '.gitignore', '*.yml', 'tests',\
+                        'LICENSE', 'matlab.prf', 'README.md', '.github'},\
                        @() compareVersions('version'), \
                        {'compareVersions.m'});\
           matlab.addons.toolbox.installToolbox('compareVersions.mltbx');\
