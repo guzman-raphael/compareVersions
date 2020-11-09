@@ -34,7 +34,7 @@ jobs:
           MATLAB_HOSTID: ${{ secrets.matlab_hostid }}
           MATLAB_VERSION: ${{ matrix.matlab_version }}
           MYSQL_TAG: ${{ matrix.mysql_version }}
-          MATLAB_LICENSE: ${{ secrets["matlab_license_" + matrix.matlab_version] }}
+          MATLAB_LICENSE: ${{ secrets[format('matlab_license_{0}', matrix.matlab_version)] }}
           DOCKER_CLIENT_TIMEOUT: "120"
           COMPOSE_HTTP_TIMEOUT: "120"
         run: |
