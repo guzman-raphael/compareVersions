@@ -15,11 +15,14 @@ jobs:
     strategy:
       matrix:
         matlab_version: ["R2019a"]
+        matlab_license: [ ${{ secrets.matlab_license_r2019a }} ]
         mysql_version: ["8.0.18", "5.7", "5.6"]
         include:
           - matlab_version: "R2018b"
+            matlab_license: ${{ secrets.matlab_license_r2018b }}
             mysql_version: "5.7"
           - matlab_version: "R2016b"
+            matlab_license: ${{ secrets.matlab_license_r2016b }}
             mysql_version: "5.7"
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +34,7 @@ jobs:
           MATLAB_HOSTID: ${{ secrets.matlab_hostid }}
           MATLAB_VERSION: ${{ matrix.matlab_version }}
           MYSQL_TAG: ${{ matrix.mysql_version }}
-          MATLAB_LICENSE: ${{ 'secrets.matlab_license_${{ matrix.matlab_version }}' }}
+          MATLAB_LICENSE: ${{ matrix.matlab_license }}
           DOCKER_CLIENT_TIMEOUT: "120"
           COMPOSE_HTTP_TIMEOUT: "120"
         run: |
