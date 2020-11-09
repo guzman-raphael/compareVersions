@@ -11,17 +11,49 @@ services:
     mac_address: $MATLAB_HOSTID
     volumes:
       - ./tests:/main/tests
-      - ./compareVersions.mltbx:/main/compareVersions.mltbx
+      - .:/src
     command:
       - /bin/bash
       - -c
       - |
+        set -e
+        export ORIG_DIR=$$(pwd)
         mkdir ~/Documents
+        cd /src
+        # Package into toolbox, and install
         matlab -nodisplay -r "
-          import matlab.unittest.TestSuite;\
-          matlab.addons.toolbox.installToolbox('compareVersions.mltbx');\
-          suite = TestSuite.fromFolder(pwd, 'IncludingSubfolders', true);\
-          res = run(suite);\
-          disp(res);\
-          if all([res.Passed])  exit, else exit(1), end;\
-        "      
+          try\
+            import matlab.unittest.TestSuite;\
+            websave([tempdir 'GHToolbox.mltbx'],\
+                    ['https://github.com/datajoint/GHToolbox' \
+                     '/releases/download/' subsref(webread(['https://api.github.com/repos' \
+                                                            '/datajoint/GHToolbox' \
+                                                            '/releases/latest']),\
+                                                   substruct('.', 'tag_name')) \
+                     '/GHToolbox.mltbx']);\
+            matlab.addons.toolbox.installToolbox([tempdir 'GHToolbox.mltbx']);\
+            docs = help('compareVersions');\
+            ghtb.package('compareVersions',\
+                         'Raphael Guzman',\
+                         'raphael.h.guzman@gmail.com',\
+                         ['Semantic version comparison m-function. Matlab function that will ' \
+                          'compare a cell array of values to a reference version (default: ' \
+                          'greater than or equal).'],\
+                         docs,\
+                         {'.vscode', '.git', '*.env', '.gitignore', '*.yml', 'tests',\
+                          'LICENSE', 'matlab.prf', 'README.md', '.github'},\
+                         @() compareVersions('version'), \
+                         {'compareVersions.m'});\
+            matlab.addons.toolbox.installToolbox('compareVersions.mltbx');\
+            cd(getenv('ORIG_DIR'));\
+            suite = TestSuite.fromFolder(pwd, 'IncludingSubfolders', true);\
+            res = run(suite);\
+            disp(res);\
+            if all([res.Passed])  exit, else exit(1), end;\
+            ,\
+          catch ME,\
+            disp(getReport(ME, 'extended'));\
+            exit(1);\
+            ,\
+          end;\
+        "
